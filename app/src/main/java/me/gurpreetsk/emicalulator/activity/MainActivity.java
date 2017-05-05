@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
         preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
         buttonCalculateEmi.setOnClickListener(new View.OnClickListener() {
@@ -68,10 +67,13 @@ public class MainActivity extends AppCompatActivity {
                     final long principal = Long.parseLong(edittextPrincipal.getText().toString().trim());
                     final double rate = 0.03;
                     final long duration = Long.parseLong(edittextDuration.getText().toString().trim());
-                    final double EMI = principal * rate * (Math.pow(1 + rate, duration) / (Math.pow(1 + rate, duration) - 1));
+                    final double EMI = principal * rate * (Math.pow(1 + rate, duration)
+                            / (Math.pow(1 + rate, duration) - 1));
 
-                    String details = "Your monthly EMI is " + String.format("%.2f", EMI) + " for " + duration + " months.\n"
-                            + "A total amount of " + String.format("%.2f", EMI * duration) + " is to be paid by you.";
+                    String details = "Your monthly EMI is " + String.format("%.2f", EMI) +
+                            " for " + duration + " months.\n"
+                            + "A total amount of " + String.format("%.2f", EMI * duration) +
+                            " is to be paid by you.";
 
                     new MaterialDialog.Builder(MainActivity.this)
                             .title("Details")
@@ -86,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
                                         intent.putParcelableArrayListExtra("emis", emis);
                                         startActivity(intent);
                                     } else {
-                                        Toast.makeText(MainActivity.this, "Invalid Input", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, "Invalid Input",
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                     edittextDuration.setText("");
                                     edittextPrincipal.setText("");
@@ -111,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         edittextPrincipal.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.i(TAG, "beforeTextChanged: " + s.toString());
             }
 
             @Override
@@ -172,7 +174,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_view_history:
                 Intent intent = new Intent(MainActivity.this, EmiListActivity.class);
-                Cursor cursor = getContentResolver().query(EmiInfoTable.CONTENT_URI, null, null, null, null);
+                Cursor cursor = getContentResolver().query(EmiInfoTable.CONTENT_URI,
+                        null, null, null, null);
                 ArrayList<Emi> emis = (ArrayList<Emi>) EmiInfoTable.getRows(cursor, false);
                 if (emis != null) {
                     intent.putParcelableArrayListExtra("emis", emis);
