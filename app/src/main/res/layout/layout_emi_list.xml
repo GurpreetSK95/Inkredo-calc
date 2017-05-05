@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearlayout_attandance"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?actionBarSize"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/textview_sno"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textview_tenure"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textview_emi"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/textview_total"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center" />
+
+</LinearLayout>
