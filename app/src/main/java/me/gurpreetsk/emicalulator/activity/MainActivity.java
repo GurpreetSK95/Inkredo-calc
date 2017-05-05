@@ -1,8 +1,10 @@
 package me.gurpreetsk.emicalulator.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    SharedPreferences preferences;
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
 
@@ -48,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
         buttonCalculateEmi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +128,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void insertInDb(long principal, long duration, double emi) {
         Emi emiObject = new Emi(String.valueOf(principal), String.valueOf(duration),
-                String.valueOf(emi), String.valueOf(emi * duration), "9999");
+                String.valueOf(emi), String.valueOf(emi * duration),
+                preferences.getString(getString(R.string.contact), "+919971897447"));
         getContentResolver().insert(EmiInfoTable.CONTENT_URI,
                 EmiInfoTable.getContentValues(emiObject, true));
     }
