@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 String.valueOf(emi), String.valueOf(emi * duration), "9999");
         getContentResolver().insert(EmiInfoTable.CONTENT_URI,
                 EmiInfoTable.getContentValues(emiObject, true));
-        Toast.makeText(this, "Inserted!", Toast.LENGTH_SHORT).show();
     }
 
     private ArrayList<Emi> calcAllEmis(long principal, double rate, long duration) {
@@ -135,11 +134,11 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
         if (duration < 4 && duration > 0) {
-            for (int i = 0; i <= duration + 3; i++) {
+            for (int i = 1; i <= duration + 3; i++) {
                 emis.add(calcEmi(principal, rate, i));
             }
         } else {
-            for (long i = duration - 4; i <= duration + 3; i++) {
+            for (long i = duration - 3; i <= duration + 3; i++) {
                 emis.add(calcEmi(principal, rate, i));
             }
         }

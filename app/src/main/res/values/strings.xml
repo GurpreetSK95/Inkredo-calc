@@ -7,4 +7,9 @@
     <string name="save_to_db">Save</string>
     <string name="show_full_report">Show more</string>
     <string name="action_view_history">View previous searches</string>
+    
+    <!--keys-->
+    <string name="is_login">is login</string>
+    <string name="name">name</string>
+    <string name="contact">contact</string>
 </resources>

@@ -11,5 +11,6 @@ public class InitApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
     }
 }

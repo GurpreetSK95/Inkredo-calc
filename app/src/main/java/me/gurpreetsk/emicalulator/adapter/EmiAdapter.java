@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -29,6 +27,7 @@ public class EmiAdapter extends RecyclerView.Adapter<EmiAdapter.MyViewHolder> {
     public EmiAdapter(Context context, ArrayList<Emi> emis) {
         this.context = context;
         this.emis = emis;
+        emis.add(0, new Emi("Principal", "Duration", "EMI", "Amount"));
     }
 
     @Override

@@ -11,9 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:id="@+id/button_truecaller_login"
         android:layout_gravity="center"
         android:layout_margin="@dimen/com_truecaller_truebutton_margin"
-        truesdk:truebutton_text="autoFill" />
+        truesdk:truebutton_text="signIn" />
 
 </RelativeLayout>
