@@ -31,7 +31,17 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".activity.EmiListActivity"></activity>
+        <activity
+            android:name=".activity.EmiListActivity"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.gurpreetsk.emicalulator.activity.MainActivity" />
+        </activity>
+
+        <provider
+            android:name=".data.EmiProvider"
+            android:authorities="me.gurpreetsk.emicalulator" />
     </application>
 
 </manifest>

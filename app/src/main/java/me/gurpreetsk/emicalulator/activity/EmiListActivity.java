@@ -31,6 +31,12 @@ public class EmiListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_emi_list);
         ButterKnife.bind(this);
 
+        setTitle("EMI list");
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         emis = getIntent().getParcelableArrayListExtra("emis");
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 

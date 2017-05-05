@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -43,6 +45,7 @@ public class EmiAdapter extends RecyclerView.Adapter<EmiAdapter.MyViewHolder> {
             holder.textviewEmi.setText("EMI");
             holder.textviewTenure.setText("Tenure");
             holder.textviewTotal.setText("Amount");
+            holder.textviewPrincipal.setText("Principal");
         } else {
             holder.textviewSno.setText("" + position);
             holder.textviewEmi.setText(
@@ -51,6 +54,7 @@ public class EmiAdapter extends RecyclerView.Adapter<EmiAdapter.MyViewHolder> {
                     String.format(emis.get(holder.getAdapterPosition()).getDuration()));
             holder.textviewTotal.setText(
                     String.format("%.2f", Double.parseDouble(emis.get(holder.getAdapterPosition()).getAmount())));
+            holder.textviewPrincipal.setText(emis.get(holder.getAdapterPosition()).getPrincipal());
         }
     }
 
@@ -70,6 +74,8 @@ public class EmiAdapter extends RecyclerView.Adapter<EmiAdapter.MyViewHolder> {
         TextView textviewTenure;
         @BindView(R.id.textview_total)
         TextView textviewTotal;
+        @BindView(R.id.textview_principal)
+        TextView textviewPrincipal;
 
         MyViewHolder(View itemView) {
             super(itemView);

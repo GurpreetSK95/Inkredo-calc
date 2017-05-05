@@ -3,22 +3,43 @@ package me.gurpreetsk.emicalulator.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ckm.simple.sql_provider.annotation.SimpleSQLColumn;
+import ckm.simple.sql_provider.annotation.SimpleSQLTable;
+
 /**
  * Created by gurpreet on 05/05/17.
  */
 
+@SimpleSQLTable(table = "EmiInfo", provider = "EmiProvider")
 public class Emi implements Parcelable {
 
+    @SimpleSQLColumn("principal")
     private String principal;
+    @SimpleSQLColumn("duration")
     private String duration;
+    @SimpleSQLColumn("emi")
     private String emi;
+    @SimpleSQLColumn("amount")
     private String amount;
+    @SimpleSQLColumn("contact")
+    private String contact;
+
+    public Emi() {
+    }
 
     public Emi(String principal, String duration, String emi, String amount) {
         this.principal = principal;
         this.duration = duration;
         this.emi = emi;
         this.amount = amount;
+    }
+
+    public Emi(String principal, String duration, String emi, String amount, String contact) {
+        this.principal = principal;
+        this.duration = duration;
+        this.emi = emi;
+        this.amount = amount;
+        this.contact = contact;
     }
 
     public Emi(Parcel in) {
@@ -60,6 +81,14 @@ public class Emi implements Parcelable {
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     @Override
