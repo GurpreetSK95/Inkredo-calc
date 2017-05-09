@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.gurpreetsk.emicalulator.R;
 import me.gurpreetsk.emicalulator.model.Emi;
 import me.gurpreetsk.emicalulator.model.EmiInfoTable;
@@ -38,10 +42,13 @@ public class MainActivity extends AppCompatActivity {
     MaterialEditText edittextDuration;
     @BindView(R.id.button_calculate_emi)
     Button buttonCalculateEmi;
+    //    @BindView(R.id.button_submit_request)
+//    Button buttonSubmitRequest;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     SharedPreferences preferences;
+    DatabaseReference loanRequestRef;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -53,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        loanRequestRef = database.getReference("Loan Requests");
 
         buttonCalculateEmi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +137,76 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @OnClick(R.id.button_submit_request)
+    public void submitRequest() {
+        if (!edittextDuration.getText().toString().equals("")
+                && !edittextPrincipal.getText().toString().equals("")) {
+            final long principal = Long.parseLong(edittextPrincipal.getText().toString().trim());
+            final double rate = 0.03;
+            final long duration = Long.parseLong(edittextDuration.getText().toString().trim());
+            final double EMI = principal * rate * (Math.pow(1 + rate, duration)
+                    / (Math.pow(1 + rate, duration) - 1));
+
+            String details = "Your monthly EMI is " + String.format("%.2f", EMI) +
+                    " for " + duration + " months.\n"
+                    + "A total amount of " + String.format("%.2f", EMI * duration) +
+                    " is to be paid by you.";
+
+            new MaterialDialog.Builder(MainActivity.this)
+                    .title("Details")
+                    .content(details)
+                    .positiveText(R.string.submit)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Emi emi = calcEmi(principal, rate, duration);
+                            emi.setContact(preferences.getString(getString(R.string.contact),
+                                    "+919971897447"));
+                            loanRequestRef.push().setValue(emi,
+                                    new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(DatabaseError databaseError,
+                                                               DatabaseReference databaseReference) {
+                                            Toast.makeText(MainActivity.this, "Request submitted!",
+                                                    Toast.LENGTH_SHORT).show();
+                                            edittextDuration.setText("");
+                                            edittextPrincipal.setText("");
+                                        }
+                                    });
+                        }
+                    })
+                    .neutralText(R.string.show_full_report)
+                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent intent = new Intent(MainActivity.this, EmiListActivity.class);
+                            ArrayList<Emi> emis = calcAllEmis(principal, rate, duration);
+                            if (emis != null) {
+                                intent.putParcelableArrayListExtra("emis", emis);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(MainActivity.this, "Invalid Input",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            edittextDuration.setText("");
+                            edittextPrincipal.setText("");
+                        }
+                    })
+                    .negativeText(android.R.string.ok)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            edittextDuration.setText("");
+                            edittextPrincipal.setText("");
+                        }
+                    })
+                    .show();
+            insertInDb(principal, duration, EMI);
+        } else {
+            Toast.makeText(MainActivity.this, "Please input data", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void insertInDb(long principal, long duration, double emi) {
         Emi emiObject = new Emi(String.valueOf(principal), String.valueOf(duration),
                 String.valueOf(emi), String.valueOf(emi * duration),
@@ -176,12 +255,12 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, EmiListActivity.class);
                 Cursor cursor = getContentResolver().query(EmiInfoTable.CONTENT_URI,
                         null, null, null, null);
-                ArrayList<Emi> emis = (ArrayList<Emi>) EmiInfoTable.getRows(cursor, false);
+                ArrayList<Emi> emis = (ArrayList<Emi>) EmiInfoTable.getRows(cursor, true);
                 if (emis != null) {
                     intent.putParcelableArrayListExtra("emis", emis);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(MainActivity.this, "Invalid Input", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "No content found!", Toast.LENGTH_SHORT).show();
                 }
                 edittextDuration.setText("");
                 edittextPrincipal.setText("");

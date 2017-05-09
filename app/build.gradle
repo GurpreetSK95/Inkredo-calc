@@ -47,4 +47,12 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.facebook.stetho:stetho:1.4.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+
+    //firebase
+    compile 'com.google.firebase:firebase-database:9.8.0'
+    compile 'com.google.firebase:firebase-crash:9.8.0'
+    compile 'com.google.firebase:firebase-core:9.8.0'
+
+
 }
+apply plugin: 'com.google.gms.google-services'

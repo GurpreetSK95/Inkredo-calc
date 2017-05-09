@@ -40,4 +40,15 @@
         android:text="@string/calculate"
         android:textColor="@color/colorAccent" />
 
+    <Button
+        android:id="@+id/button_submit_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_16dp"
+        android:background="@android:color/transparent"
+        android:padding="@dimen/margin_16dp"
+        android:text="@string/submit_loan_request"
+        android:textColor="@color/colorAccent" />
+
 </LinearLayout>
